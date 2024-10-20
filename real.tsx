@@ -1,3 +1,6 @@
+
+
+
 import React, { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import './App.css';
@@ -8,43 +11,22 @@ function App() {
     purpose: '',
     hostName: '',
   });
-  const [showResult, setShowResult] = useState(false);
-  const [uniqueCode, setUniqueCode] = useState('');
-  const [generationOption, setGenerationOption] = useState('qr'); // "qr" for QR code, "code" for unique code
+  const [showQR, setShowQR] = useState(false);
+  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setVisitorDetails(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setGenerationOption(e.target.value);
-  };
-
-  // Function to generate a random alphanumeric string
-  const generateUniqueCode = () => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < 8; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return result;
-  };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (generationOption === 'code') {
-      const newCode = generateUniqueCode(); // Generate unique code if selected
-      setUniqueCode(newCode);
-    }
-    setShowResult(true); // Show the result based on the option selected
+    setShowQR(true);
   };
 
   const handleNewVisitor = () => {
     setVisitorDetails({ name: '', purpose: '', hostName: '' });
-    setShowResult(false);
-    setUniqueCode(''); // Reset the unique code
-    setGenerationOption('qr'); // Reset option to default QR code
+    setShowQR(false);
   };
 
   const visitorPassUrl = `${window.location.origin}/visitor-pass.html?` + 
@@ -57,7 +39,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>Estate Security App</h1>
-        {!showResult ? (
+        {!showQR ? (
           <form onSubmit={handleSubmit}>
             <input
               type="text"
@@ -84,29 +66,7 @@ function App() {
               onChange={handleInputChange}
               required
             />
-
-            <div className="generation-options">
-              <label>
-                <input
-                  type="radio"
-                  value="qr"
-                  checked={generationOption === 'qr'}
-                  onChange={handleOptionChange}
-                />
-                Generate QR Code
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  value="code"
-                  checked={generationOption === 'code'}
-                  onChange={handleOptionChange}
-                />
-                Generate Unique Code
-              </label>
-            </div>
-
-            <button type="submit">Generate</button>
+            <button type="submit">Generate QR Code</button>
           </form>
         ) : (
           <div className="result-page">
@@ -116,19 +76,13 @@ function App() {
               <p><strong>Purpose:</strong> {visitorDetails.purpose}</p>
               <p><strong>Host:</strong> {visitorDetails.hostName}</p>
             </div>
-
-            {generationOption === 'qr' ? (
-              <div className="qr-code">
-                <QRCodeSVG value={visitorPassUrl} size={200} />
-              </div>
-            ) : (
-              <p><strong>Unique Code:</strong> {uniqueCode}</p>
-            )}
-
+            <div className="qr-code">
+              <QRCodeSVG value={visitorPassUrl} size={200} />
+            </div>
             <button onClick={handleNewVisitor}>New Visitor</button>
           </div>
         )}
-      </header>
+          </header>
     </div>
   );
 }
