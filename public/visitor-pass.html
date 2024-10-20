@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Pass</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f4f8;
+        }
+        .visitor-pass {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .pass-details p {
+            margin: 10px 0;
+        }
+        .validity {
+            font-style: italic;
+            color: #7f8c8d;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="visitor-pass">
+        <h1>Visitor Pass</h1>
+        <div class="pass-details" id="passDetails">
+            <!-- Visitor details will be inserted here -->
+        </div>
+        <div class="validity">
+            <p>Valid for today only</p>
+        </div>
+    </div>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function displayVisitorDetails() {
+            const name = getQueryParam('name');
+            const purpose = getQueryParam('purpose');
+            const hostName = getQueryParam('hostName');
+            const timestamp = getQueryParam('timestamp');
+
+            const passDetails = document.getElementById('passDetails');
+            passDetails.innerHTML = `
+                <p><strong>Name:</strong> ${name || 'N/A'}</p>
+                <p><strong>Purpose:</strong> ${purpose || 'N/A'}</p>
+                <p><strong>Host:</strong> ${hostName || 'N/A'}</p>
+                <p><strong>Date:</strong> ${new Date(timestamp).toLocaleString() || 'N/A'}</p>
+            `;
+        }
+
+        displayVisitorDetails();
+    </script>
+</body>
+</html>
