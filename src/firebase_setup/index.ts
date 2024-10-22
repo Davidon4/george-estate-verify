@@ -8,7 +8,7 @@ import { SignupProps, SigninProps } from "../types";
 
 const db = firestore;
 
-export const signUp = async ({ email, password }: SignupProps) => {
+export const signUp = async ({ email, password, fullName, houseNumber, houseType, block, color }: SignupProps) => {
   try {
     // Use createUserWithEmailAndPassword directly with 'auth'
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -18,6 +18,11 @@ export const signUp = async ({ email, password }: SignupProps) => {
     await addDoc(collection(db, "users"), {
       uid: user.uid,
       email: user.email,
+      fullName: fullName,
+      houseNumber: houseNumber,
+      houseType: houseType,
+      block: block,
+      color: color,
       // Add other user fields if necessary
     });
     return true;
