@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Signup from './view/auth/sign-up';
-import Signin from './view/auth/sign-in';
+import Signup from './view/auth/Signup/sign-up';
+import Signin from './view/auth/Signin/sign-in';
 import Dashboard from './view/app/Dashboard';
 import { AuthProvider } from './AuthProvider';
 import reportWebVitals from './reportWebVitals';
@@ -16,11 +16,12 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
     <AuthProvider>
+      {/* <App/> */}
       <Routes>
         <Route path="/" element={<App/>}/>
-        <Route path="/" element={<Signin/>}/>
-        <Route path="/" element={<Signup/>}/>
-        <Route path="/" element={<Dashboard/>}/>
+        <Route path="/sign-in" element={<Signin/>}/>
+        <Route path="/sign-up" element={<Signup/>}/>
+        <Route path="/dashboard" element={<Dashboard/>}/>
     </Routes>
     </AuthProvider>
     </BrowserRouter>

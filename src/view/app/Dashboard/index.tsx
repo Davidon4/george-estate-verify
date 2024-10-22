@@ -14,9 +14,6 @@ interface VisitorDetails {
 
 const Dashboard = () => {
     const user = useContext(AuthContext);
-    if(!user) {
-        return <Navigate replace to="/sign-in"/>
-    }
   const [visitorDetails, setVisitorDetails] = useState({
     name: '',
     purpose: '',
@@ -87,6 +84,10 @@ const Dashboard = () => {
       setRetrievedDetails(null); // If no match, clear previous results
     }
   };
+
+  if(!user) {
+    return <Navigate replace to="/sign-in"/>
+}
 
   return (
     <div className="container">

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signIn } from "../../firebase_setup";
+import { signIn } from "../../../firebase_setup";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
@@ -12,10 +12,10 @@ const Signin = () => {
     setPassword("");
     const res = await signIn({email, password});
     if (typeof res === "object" && res.error) {
-        seterror(res.error); // Set the error message if there's an error
+        seterror(res.error);
       } else {
-        // Handle successful login (if necessary)
-        seterror(""); // Clear any previous error
+        
+        seterror("");
       }
   };
   return (

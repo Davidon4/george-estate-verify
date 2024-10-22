@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { signUp } from "../../firebase_setup";
+import { signUp } from "../../../firebase_setup";
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,7 +44,7 @@ const Signup = () => {
           <button type="submit">Submit</button>
         </form>
         <p>
-          already registered? <Link to="/login">Login</Link>
+          already registered? <Link to="/sign-in">Login</Link>
         </p>
       </div>
     </>

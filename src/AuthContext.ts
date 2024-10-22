@@ -4,5 +4,5 @@ import { createContext } from "react";
 interface UserContextType {
     user: User | null;
   } 
-const AuthContext = createContext<UserContextType | null>(null);
+const AuthContext = createContext<UserContextType | undefined>(undefined);
 export default AuthContext;
