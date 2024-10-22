@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { signIn } from "../../../firebase_setup";
+import { useNavigate } from "react-router-dom";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, seterror] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -12,11 +15,14 @@ const Signin = () => {
     setPassword("");
     const res = await signIn({email, password});
     if (typeof res === "object" && res.error) {
-        seterror(res.error);
+        setError(res.error);
       } else {
-        
-        seterror("");
+        navigate("/dashboard");
+        setError("");
       }
+
+      setEmail("");
+      setPassword("");
   };
   return (
     <>
