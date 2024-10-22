@@ -7,26 +7,28 @@ const Signup = () => {
   const [password, setPassword] = useState<string>("");
   const [fullName, setFullName] = useState<string>("");
   const [houseNumber, setHouseNumber] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [houseType, setHouseType] = useState<string>("");
   const [block, setBlock] = useState<string>("");
   const [color, setColor] = useState<string>("");
   const [error, seterror] = useState<string>("");
 
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const houseNumberParsed = Number(houseNumber);
+    const phoneNumberParsed = Number(phoneNumber);
 
       setEmail("");
       setPassword("");
       setFullName("");
       setHouseNumber("");
+      setPhoneNumber("");
       setHouseType("");
       setBlock("");
       setColor("");
 
-      const res = await signUp({email, password, fullName, houseNumber: houseNumberParsed, houseType, block, color});
+      const res = await signUp({email, password, fullName, houseNumber: houseNumberParsed, phoneNumber: phoneNumberParsed, houseType, block, color});
       if (typeof res === "object" && res.error) {
         seterror(res.error); // Set the error message if there's an error
       } else {
@@ -72,6 +74,14 @@ const Signup = () => {
             placeholder="House Number"
             required
             onChange={(e) => setHouseNumber(e.target.value)}
+          />
+          <input
+            type="number"
+            name="phoneNumber"
+            value={phoneNumber}
+            placeholder="Phone Number"
+            required
+            onChange={(e) => setPhoneNumber(e.target.value)}
           />
           <input
             type="text"

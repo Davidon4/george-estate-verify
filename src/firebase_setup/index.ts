@@ -3,27 +3,25 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { setDoc, doc} from "firebase/firestore";
 import { SignupProps, SigninProps } from "../types";
 
-const db = firestore;
-
-export const signUp = async ({ email, password, fullName, houseNumber, houseType, block, color }: SignupProps) => {
+export const signUp = async ({ email, password, fullName, houseNumber, houseType, phoneNumber, block, color }: SignupProps) => {
   try {
     // Use createUserWithEmailAndPassword directly with 'auth'
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
     // Store additional user info in Firestore
-    await addDoc(collection(db, "users"), {
+    await setDoc(doc(firestore, "users", user.uid), {
       uid: user.uid,
       email: user.email,
       fullName: fullName,
       houseNumber: houseNumber,
       houseType: houseType,
+      phoneNumber: phoneNumber,
       block: block,
       color: color,
-      // Add other user fields if necessary
     });
     return true;
   } catch (error: any) {
