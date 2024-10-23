@@ -1,37 +1,37 @@
 import React, { useState } from 'react';
 import { useContext } from 'react';
 import AuthContext from '../../../AuthContext';
+import { addDoc, collection } from 'firebase/firestore';
+import { firestore } from '../../../firebase';
 import { Navigate } from 'react-router-dom';
-import { QRCodeSVG } from 'qrcode.react';
-import "./styles.css"
+import "./styles.css";
 
 interface VisitorDetails {
   name: string;
   purpose: string;
-  hostName: string;
+  destination: string;
+  date: number;
+  time: number;
   uniqueCode: string;
 }
 
 const Dashboard = () => {
-    const user = useContext(AuthContext);
+  const user = useContext(AuthContext);
   const [visitorDetails, setVisitorDetails] = useState({
     name: '',
     purpose: '',
-    hostName: '',
+    destination: '',
+    date: '',
+    time: '',
   });
   const [showResult, setShowResult] = useState(false);
   const [uniqueCode, setUniqueCode] = useState('');
-  const [generationOption, setGenerationOption] = useState('qr'); // "qr" for QR code, "code" for unique code
   const [enteredCode, setEnteredCode] = useState('');
   const [retrievedDetails, setRetrievedDetails] = useState<VisitorDetails | null>(null);
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setVisitorDetails(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleOptionChange = (e: any) => {
-    setGenerationOption(e.target.value);
   };
 
   // Function to generate a random alphanumeric string
@@ -44,34 +44,38 @@ const Dashboard = () => {
     return result;
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     let newCode = '';
-    if (generationOption === 'code') {
       newCode = generateUniqueCode();
       setUniqueCode(newCode);
 
       // Store the visitor details along with the unique code in localStorage
-      const storedData = {
+      const visitorData = {
         ...visitorDetails,
         uniqueCode: newCode,
       };
-      localStorage.setItem(newCode, JSON.stringify(storedData));
-    }
-    setShowResult(true); // Show the result based on the option selected
+      console.log('Submitting visitor data=>', visitorData);
+      try {
+        await addDoc(collection(firestore, 'visitors'), visitorData);
+        setShowResult(true); // Show the result
+      } catch (error) {
+        console.error('Error adding document: ', error);
+      }
   };
 
   const handleNewVisitor = () => {
-    setVisitorDetails({ name: '', purpose: '', hostName: '' });
+    setVisitorDetails({ name: '', purpose: '', destination: '', date: '', time: '' });
     setShowResult(false);
     setUniqueCode(''); // Reset the unique code
-    setGenerationOption('qr'); // Reset option to default QR code
   };
 
   const visitorPassUrl = `${window.location.origin}/visitor-pass.html?` +
     `name=${encodeURIComponent(visitorDetails.name)}` +
     `&purpose=${encodeURIComponent(visitorDetails.purpose)}` +
-    `&hostName=${encodeURIComponent(visitorDetails.hostName)}` +
+    `&destination=${encodeURIComponent(visitorDetails.destination)}` +
+    `&date=${encodeURIComponent(visitorDetails.date)}` +
+    `&time=${encodeURIComponent(visitorDetails.time)}` +
     `&timestamp=${encodeURIComponent(new Date().toISOString())}`;
 
   const handleCodeLookup = (e: any) => {
@@ -114,79 +118,45 @@ const Dashboard = () => {
             />
             <input
               type="text"
-              name="hostName"
-              placeholder="Host Name"
-              value={visitorDetails.hostName}
+              name="destination"
+              placeholder="Destination"
+              value={visitorDetails.destination}
               onChange={handleInputChange}
               required
             />
-            <div className="generation-options">
-              <label>
-                <input
-                  type="radio"
-                  value="qr"
-                  checked={generationOption === 'qr'}
-                  onChange={handleOptionChange}
-                />
-                Generate QR Code
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  value="code"
-                  checked={generationOption === 'code'}
-                  onChange={handleOptionChange}
-                />
-                Generate Unique Code
-              </label>
-            </div>
+            <input
+              type="time"
+              name="time"
+              placeholder="Time of Visit"
+              value={visitorDetails.time}
+              onChange={handleInputChange}
+              required
+            />
+            <input
+              type="date"
+              name="date"
+              placeholder="Date of Visit"
+              value={visitorDetails.date}
+              onChange={handleInputChange}
+              required
+            />
             <button type="submit">Generate</button>
           </form>
         ) : (
           <div className="result-page">
             <h2>Visitor Pass</h2>
             <div className="visitor-details">
-              <p><strong>Name:</strong> {visitorDetails.name}</p>
-              <p><strong>Purpose:</strong> {visitorDetails.purpose}</p>
-              <p><strong>Host:</strong> {visitorDetails.hostName}</p>
+              <p><strong>Name of Visitor:</strong> {visitorDetails.name}</p>
+              <p><strong>Purpose of Visit:</strong> {visitorDetails.purpose}</p>
+              <p><strong>Destination of Visit:</strong> {visitorDetails.destination}</p>
+              <p><strong>Date of Visit:</strong> {visitorDetails.date}</p>
+              <p><strong>Timeframe of Visit:</strong> {visitorDetails.time}</p>
             </div>
-            {generationOption === 'qr' ? (
-              <div className="qr-code">
-                <QRCodeSVG value={visitorPassUrl} size={200} />
-              </div>
-            ) : (
               <p><strong>Unique Code:</strong> {uniqueCode}</p>
-            )}
 
             <button onClick={handleNewVisitor}>New Visitor</button>
           </div>
         )}
-
-        <div className="code-lookup">
-          <h2>Lookup Visitor Details</h2>
-          <form onSubmit={handleCodeLookup}>
-            <input
-              type="text"
-              placeholder="Enter Unique Code"
-              value={enteredCode}
-              onChange={(e) => setEnteredCode(e.target.value)}
-              required
-            />
-            <button type="submit">Lookup</button>
-          </form>
-
-          {retrievedDetails ? (
-            <div className="visitor-details">
-              <h3>Visitor Details</h3>
-              <p><strong>Name:</strong> {retrievedDetails.name}</p>
-              <p><strong>Purpose:</strong> {retrievedDetails.purpose}</p>
-              <p><strong>Host:</strong> {retrievedDetails.hostName}</p>
-              <p><strong>Code:</strong> {retrievedDetails.uniqueCode}</p>
-            </div>
-          ) : enteredCode && (
-            <p>No visitor details found for this code.</p>
-          )}
-        </div>
       </header>
     </div>
   );
