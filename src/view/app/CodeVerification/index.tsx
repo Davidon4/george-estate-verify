@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { firestore } from '../../../firebase';
+import "./styles.css";
 
 interface VisitorDetails {
     name: string;
     purpose: string;
     destination: string;
-    date: number;
-    time: number;
+    date: string;
+    time: string;
     uniqueCode: string;
   }
 
@@ -15,6 +16,7 @@ const CodeVerification = () => {
   const [enteredCode, setEnteredCode] = useState('');
   const [visitorDetails, setVisitorDetails] = useState<VisitorDetails | null>(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleCodeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEnteredCode(e.target.value);
@@ -22,6 +24,8 @@ const CodeVerification = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);  // Start loader
+    setError('');
 
     try {
       // Query Firestore to find the visitor by uniqueCode
@@ -42,6 +46,9 @@ const CodeVerification = () => {
     } catch (err) {
       console.error('Error verifying code: ', err);
       setError('An error occurred while verifying the code');
+      setVisitorDetails(null);
+    } finally {
+      setLoading(false);  // Stop loader
     }
   };
 
@@ -58,6 +65,12 @@ const CodeVerification = () => {
         />
         <button type="submit">Verify Code</button>
       </form>
+
+      {loading && (
+        <div className="spinner">
+          <div className="spinner-icon"></div>
+        </div>
+      )}
 
       {error && <p>{error}</p>}
 

@@ -10,8 +10,8 @@ interface VisitorDetails {
   name: string;
   purpose: string;
   destination: string;
-  date: number;
-  time: number;
+  date: string;
+  time: string;
   uniqueCode: string;
 }
 
