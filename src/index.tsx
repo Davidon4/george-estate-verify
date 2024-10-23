@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from './view/auth/Signup/sign-up';
 import Signin from './view/auth/Signin/sign-in';
 import Dashboard from './view/app/Dashboard';
+import CodeVerification from './view/app/CodeVerification';
 import { AuthProvider } from './AuthProvider';
 import reportWebVitals from './reportWebVitals';
 
@@ -22,6 +23,7 @@ root.render(
         <Route path="/sign-in" element={<Signin/>}/>
         <Route path="/sign-up" element={<Signup/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/code-verify" element={<CodeVerification/>}/>
     </Routes>
     </AuthProvider>
     </BrowserRouter>

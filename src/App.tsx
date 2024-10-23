@@ -12,6 +12,7 @@ const App = () => {
         <div>
           <p>Logged in as: {authContext.user.email}</p>
           <Link to="/dashboard">Go to Dashboard</Link>
+          <Link to="/code-verify">Verify Code</Link>
         </div>
       ) : (
         <div>
