@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "../../../firebase_setup";
 
 const Signup = () => {
@@ -11,7 +11,9 @@ const Signup = () => {
   const [houseType, setHouseType] = useState<string>("");
   const [block, setBlock] = useState<string>("");
   const [color, setColor] = useState<string>("");
-  const [error, seterror] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,10 +32,11 @@ const Signup = () => {
 
       const res = await signUp({email, password, fullName, houseNumber: houseNumberParsed, phoneNumber: phoneNumberParsed, houseType, block, color});
       if (typeof res === "object" && res.error) {
-        seterror(res.error); // Set the error message if there's an error
+        setError(res.error); // Set the error message if there's an error
       } else {
+        navigate("/dashboard");
         // Handle successful login (if necessary)
-        seterror(""); // Clear any previous error
+        setError(""); // Clear any previous error
       }
   };
 

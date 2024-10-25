@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { signIn } from "../../../firebase_setup";
 import { useNavigate } from "react-router-dom";
+import "./styles.css"
 
 const Signin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -26,7 +27,7 @@ const Signin = () => {
   };
   return (
     <>
-      {error ? <div>{error}</div> : null}
+      {error ? <div className="error">{error}</div> : null}
       <form onSubmit={handleSubmit}>
         <input
           type="text"

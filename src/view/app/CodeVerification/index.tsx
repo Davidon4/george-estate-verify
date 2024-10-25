@@ -54,11 +54,11 @@ const CodeVerification = () => {
 
   return (
     <div className="container">
-      <h1>Verify Visitor Code</h1>
+      <h1>Verify Visitor Pass Code</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Enter Unique Code"
+          placeholder="Enter Pass Code"
           value={enteredCode}
           onChange={handleCodeInputChange}
           required

@@ -16,7 +16,7 @@
   
   form {
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
+    /* flex-direction: column; Stack elements vertically */
     gap: 10px;
   }
   
