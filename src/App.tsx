@@ -9,7 +9,7 @@ const App = () => {
   return (
     <>
 <video autoPlay loop muted playsInline className="background-video">
-  <source src="/gatevid.mp4" type="video/mp4" />
+  <source src="https://youtube.com/shorts/v87gLc_HRRo" type="video/mp4" />
 </video>
     <div className="content">
       <h1>Welcome to George Crescent Verify</h1>
