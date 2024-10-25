@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "../../../firebase_setup";
+import "./styles.css"
 
 const Signup = () => {
   const [email, setEmail] = useState<string>("");
@@ -32,20 +33,21 @@ const Signup = () => {
 
       const res = await signUp({email, password, fullName, houseNumber: houseNumberParsed, phoneNumber: phoneNumberParsed, houseType, block, color});
       if (typeof res === "object" && res.error) {
-        setError(res.error); // Set the error message if there's an error
+        setError(res.error);
       } else {
         navigate("/dashboard");
-        // Handle successful login (if necessary)
-        setError(""); // Clear any previous error
+        setError("");
       }
   };
 
   return (
     <>
-      <h2>Sign Up</h2>
-      <div>
-        {error ? <div>{error}</div> : null}
+    <div className="background-image">
+    <div className="content">
+
+        {error ? <div className="error">{error}</div> : null}
         <form onSubmit={handleSubmit}>
+        <h1>Create your account</h1>
           <input
             type="email"
             name="email"
@@ -110,11 +112,9 @@ const Signup = () => {
             required
             onChange={(e) => setColor(e.target.value)}
           />
-          <button type="submit">Submit</button>
+          <button type="submit">Register</button>
         </form>
-        <p>
-          already registered? <Link to="/sign-in">Login</Link>
-        </p>
+      </div>
       </div>
     </>
   );

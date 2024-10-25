@@ -6,15 +6,6 @@ import { firestore } from '../../../firebase';
 import { Navigate } from 'react-router-dom';
 import "./styles.css";
 
-interface VisitorDetails {
-  name: string;
-  purpose: string;
-  destination: string;
-  date: string;
-  time: string;
-  uniqueCode: string;
-}
-
 const Dashboard = () => {
   const user = useContext(AuthContext);
   const [visitorDetails, setVisitorDetails] = useState({
@@ -24,10 +15,8 @@ const Dashboard = () => {
     date: '',
     time: '',
   });
-  const [showResult, setShowResult] = useState(false);
-  const [uniqueCode, setUniqueCode] = useState('');
-  const [enteredCode, setEnteredCode] = useState('');
-  const [retrievedDetails, setRetrievedDetails] = useState<VisitorDetails | null>(null);
+  const [showResult, setShowResult] = useState<boolean>(false);
+  const [uniqueCode, setUniqueCode] = useState<string>('');
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -50,15 +39,13 @@ const Dashboard = () => {
       newCode = generateUniqueCode();
       setUniqueCode(newCode);
 
-      // Store the visitor details along with the unique code in localStorage
       const visitorData = {
         ...visitorDetails,
         uniqueCode: newCode,
       };
-      console.log('Submitting visitor data=>', visitorData);
       try {
         await addDoc(collection(firestore, 'visitors'), visitorData);
-        setShowResult(true); // Show the result
+        setShowResult(true);
       } catch (error) {
         console.error('Error adding document: ', error);
       }
@@ -67,39 +54,19 @@ const Dashboard = () => {
   const handleNewVisitor = () => {
     setVisitorDetails({ name: '', purpose: '', destination: '', date: '', time: '' });
     setShowResult(false);
-    setUniqueCode(''); // Reset the unique code
-  };
-
-  const visitorPassUrl = `${window.location.origin}/visitor-pass.html?` +
-    `name=${encodeURIComponent(visitorDetails.name)}` +
-    `&purpose=${encodeURIComponent(visitorDetails.purpose)}` +
-    `&destination=${encodeURIComponent(visitorDetails.destination)}` +
-    `&date=${encodeURIComponent(visitorDetails.date)}` +
-    `&time=${encodeURIComponent(visitorDetails.time)}` +
-    `&timestamp=${encodeURIComponent(new Date().toISOString())}`;
-
-  const handleCodeLookup = (e: any) => {
-    e.preventDefault();
-    // Retrieve visitor details from localStorage based on the entered unique code
-    const storedDetails = localStorage.getItem(enteredCode);
-    if (storedDetails) {
-      setRetrievedDetails(JSON.parse(storedDetails));
-    } else {
-      setRetrievedDetails(null); // If no match, clear previous results
-    }
+    setUniqueCode('');
   };
 
   if(!user) {
     return <Navigate replace to="/sign-in"/>
-}
+  }
 
   return (
     <div className="container">
       <header className="content-header">
-        <h1>Crescent Verify</h1>
-
         {!showResult ? (
           <form onSubmit={handleSubmit}>
+            <h1>Crescent Verify</h1>
             <input
               type="text"
               name="name"

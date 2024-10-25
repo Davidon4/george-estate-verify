@@ -13,10 +13,10 @@ interface VisitorDetails {
   }
 
 const CodeVerification = () => {
-  const [enteredCode, setEnteredCode] = useState('');
+  const [enteredCode, setEnteredCode] = useState<string>('');
   const [visitorDetails, setVisitorDetails] = useState<VisitorDetails | null>(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleCodeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEnteredCode(e.target.value);
@@ -54,7 +54,8 @@ const CodeVerification = () => {
 
   return (
     <div className="container">
-      <h1>Verify Visitor Pass Code</h1>
+          <div className="content">
+          <h1>Verify Visitor Pass Code</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -84,6 +85,7 @@ const CodeVerification = () => {
           <p><strong>Time:</strong> {visitorDetails.time}</p>
         </div>
       )}
+    </div>
     </div>
   );
 };

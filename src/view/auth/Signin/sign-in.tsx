@@ -29,9 +29,9 @@ const Signin = () => {
     <>
     <div className="background-image">
     <div className="content">
-    <h1>Login to your account</h1>
       {error ? <div className="error">{error}</div> : null}
       <form onSubmit={handleSubmit}>
+      <h1>Login to your account</h1>
         <input
           type="text"
           name="email"
@@ -46,7 +46,7 @@ const Signin = () => {
           placeholder="Your Password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <input type="submit" value="submit" />
+        <button type="submit">Login</button>
       </form>
       </div>
       </div>
