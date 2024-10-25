@@ -27,6 +27,9 @@ const Signin = () => {
   };
   return (
     <>
+    <div className="background-image">
+    <div className="content">
+    <h1>Login to your account</h1>
       {error ? <div className="error">{error}</div> : null}
       <form onSubmit={handleSubmit}>
         <input
@@ -45,6 +48,8 @@ const Signin = () => {
         />
         <input type="submit" value="submit" />
       </form>
+      </div>
+      </div>
     </>
   );
 };

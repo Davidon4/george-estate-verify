@@ -1,15 +1,13 @@
-/* Signin Component Styles */
-body {
+.background-image {
     font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
   }
-  
-  form {
+
+  .content{
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -18,7 +16,6 @@ body {
     border-radius: 8px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 320px;
   }
   
   input[type="text"],
@@ -54,4 +51,3 @@ body {
     font-size: 0.9rem;
     text-align: center;
   }
-  

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "./AuthContext";
+import BackgroundVideo from "./components/BackgroundVideo/BackgroundVideo";
 import "./App.css"
 
 const App = () => {
@@ -8,9 +9,7 @@ const App = () => {
 
   return (
     <>
-<video autoPlay loop muted playsInline className="background-video">
-  <source src="https://youtube.com/shorts/v87gLc_HRRo" type="video/mp4" />
-</video>
+        <BackgroundVideo src="/gatevid.mp4" />
     <div className="content">
       <h1>Welcome to George Crescent Verify</h1>
       {authContext && authContext.user ? (
