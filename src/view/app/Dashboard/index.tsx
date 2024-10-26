@@ -17,6 +17,8 @@ const Dashboard = () => {
   });
   const [showResult, setShowResult] = useState<boolean>(false);
   const [uniqueCode, setUniqueCode] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -35,6 +37,8 @@ const Dashboard = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
     let newCode = '';
       newCode = generateUniqueCode();
       setUniqueCode(newCode);
@@ -46,9 +50,12 @@ const Dashboard = () => {
       try {
         await addDoc(collection(firestore, 'visitors'), visitorData);
         setShowResult(true);
+        setError('')
       } catch (error) {
         console.error('Error adding document: ', error);
+        setError('An error occurred while verifying the code');
       }
+      setLoading(false)
   };
 
   const handleNewVisitor = () => {
@@ -64,7 +71,12 @@ const Dashboard = () => {
   return (
     <div className="container">
       <header className="content-header">
-        {!showResult ? (
+        {loading ? (
+          <div className="spinner">
+          <div className="spinner-icon"></div>
+          </div>
+        ) : (
+          !showResult ? (
           <form onSubmit={handleSubmit}>
             <h1>Crescent Verify</h1>
             <input
@@ -123,6 +135,7 @@ const Dashboard = () => {
 
             <button onClick={handleNewVisitor}>New Visitor</button>
           </div>
+        )
         )}
       </header>
     </div>
